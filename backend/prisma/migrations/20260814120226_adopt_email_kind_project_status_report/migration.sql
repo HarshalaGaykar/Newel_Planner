@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "EmailKind" ADD VALUE 'PROJECT_STATUS_REPORT';

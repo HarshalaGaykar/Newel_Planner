@@ -1,0 +1,17 @@
+ALTER TABLE "Attendance"
+ADD COLUMN "checkInTimeZone" TEXT,
+ADD COLUMN "checkOutTimeZone" TEXT;
+
+ALTER TABLE "AttendanceRegularization"
+ADD COLUMN "requestedInTimeZone" TEXT,
+ADD COLUMN "requestedOutTimeZone" TEXT;
+
+ALTER TABLE "Attendance"
+ALTER COLUMN "date" TYPE TIMESTAMPTZ(3) USING "date" AT TIME ZONE 'UTC',
+ALTER COLUMN "checkIn" TYPE TIMESTAMPTZ(3) USING "checkIn" AT TIME ZONE 'UTC',
+ALTER COLUMN "checkOut" TYPE TIMESTAMPTZ(3) USING "checkOut" AT TIME ZONE 'UTC';
+
+ALTER TABLE "AttendanceRegularization"
+ALTER COLUMN "date" TYPE TIMESTAMPTZ(3) USING "date" AT TIME ZONE 'UTC',
+ALTER COLUMN "requestedIn" TYPE TIMESTAMPTZ(3) USING "requestedIn" AT TIME ZONE 'UTC',
+ALTER COLUMN "requestedOut" TYPE TIMESTAMPTZ(3) USING "requestedOut" AT TIME ZONE 'UTC';

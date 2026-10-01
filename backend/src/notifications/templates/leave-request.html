@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; line-height: 1.6; }
+        .container { max-width: 640px; margin: 20px auto; padding: 20px; border: 1px solid #eee; border-radius: 10px; }
+        .header { border-bottom: 2px solid #6366f1; padding-bottom: 10px; margin-bottom: 20px; }
+        table.detail { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        table.detail td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; font-size: 14px; }
+        table.detail td.label { color: #666; width: 200px; background: #fafafb; }
+        .footer { font-size: 12px; color: #777; margin-top: 28px; border-top: 1px solid #eee; padding-top: 10px; }
+        .cta { display: inline-block; background: #6366f1; color: #fff !important; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Newel Planner - Leave Request</h2>
+        </div>
+        <p>Hello {{approverName}},</p>
+        <p><strong>{{employeeName}}</strong> has applied for leave and needs your approval.</p>
+
+        <table class="detail">
+            <tr><td class="label">Employee</td><td>{{employeeName}}{{employeeCodeSuffix}}</td></tr>
+            <tr><td class="label">Department</td><td>{{department}}</td></tr>
+            <tr><td class="label">Leave type</td><td><strong>{{leaveTypeName}}</strong> ({{paidLabel}})</td></tr>
+            <tr><td class="label">Dates</td><td><strong>{{dateRange}}</strong></td></tr>
+            <tr><td class="label">Duration</td><td>{{durationLabel}}</td></tr>
+            {{sandwichRow}}
+            <tr><td class="label">Reason</td><td>{{reason}}</td></tr>
+            <tr><td class="label">Balance after this request</td><td>{{balanceLabel}}</td></tr>
+            <tr><td class="label">Applied on</td><td>{{appliedAt}}</td></tr>
+        </table>
+
+        <p><a class="cta" href="{{link}}">Review request</a></p>
+
+        <div class="footer">
+            <p>{{employeeName}} is copied on this email and will be notified of your decision in this same thread.</p>
+            <p>This is an automated notification from Newel Planner. Please do not reply directly.</p>
+        </div>
+    </div>
+</body>
+</html>
