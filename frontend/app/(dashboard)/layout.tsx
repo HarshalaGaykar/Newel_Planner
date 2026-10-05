@@ -2,6 +2,7 @@
 
 import { DynamicSidebar } from '@/components/layout/DynamicSidebar';
 import { NotificationBell } from '@/components/layout/NotificationBell';
+import { WhatsNewNavButton } from '@/components/whats-new/WhatsNewNavButton';
 import { ClockWidget } from '@/components/layout/ClockWidget';
 import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 import { useAuthStore } from '@/lib/store/auth';
@@ -27,6 +28,7 @@ function TopBar({ onMenuOpen }: { onMenuOpen: () => void }) {
         <ClockWidget />
         <div className="hidden sm:block h-4 w-px bg-border/60" />
         <AnimatedThemeToggler variant="star" />
+        <WhatsNewNavButton />
         <NotificationBell />
 
         {user && <div className="hidden sm:block h-4 w-px bg-border/60" />}

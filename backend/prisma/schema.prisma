@@ -61,9 +61,9 @@ model User {
   addedExpenses           ProjectExpense[]           @relation("ExpenseAdder")
   generatedTmRuns         TmBillingRun[]             @relation("TmRunGenerator")
 
-  passwordResetOtps         PasswordResetOtp[]
-  reportSettingsUpdated     DeliveryReportSettings[]      @relation("ReportSettingsUpdatedBy")
-  reportSends               DeliveryReportSend[]          @relation("ReportSentBy")
+  passwordResetOtps     PasswordResetOtp[]
+  reportSettingsUpdated DeliveryReportSettings[] @relation("ReportSettingsUpdatedBy")
+  reportSends           DeliveryReportSend[]     @relation("ReportSentBy")
 
   workflowRequests          WorkflowInstance[]            @relation("WorkflowRequester")
   workflowActions           WorkflowActionLog[]           @relation("WorkflowActor")
@@ -152,7 +152,8 @@ model User {
   taskUploadBatchesUploaded TaskUploadBatch[] @relation("TaskUploadBatchUploader")
 
   // Task Board bulk upload
-  taskBulkUploadsUploaded TaskBulkUploadBatch[] @relation("TaskBulkUploadUploader")
+  taskBulkUploadsUploaded TaskBulkUploadBatch[]   @relation("TaskBulkUploadUploader")
+  AppFeatureInteraction   AppFeatureInteraction[]
 
   @@index([roleId])
   @@index([departmentId])
@@ -414,19 +415,19 @@ model ProjectStatusCcUser {
 }
 
 model Project {
-  id                 String                 @id @default(uuid())
+  id                 String                  @id @default(uuid())
   name               String
   description        String?
   type               ProjectType
   startDate          DateTime
   endDate            DateTime?
-  status             ProjectStatus          @default(DRAFT)
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
-  projectCode        String?                @unique
+  status             ProjectStatus           @default(DRAFT)
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  projectCode        String?                 @unique
   clientId           String?
-  isInternal         Boolean                @default(false)
-  methodology        Methodology            @default(AGILE)
+  isInternal         Boolean                 @default(false)
+  methodology        Methodology             @default(AGILE)
   pmId               String?
   budgetHours        Float?
   budgetCost         Float?
@@ -434,7 +435,7 @@ model Project {
   slaType            String?
   profitCenterId     String?
   currencyId         String?
-  billingModel       BillingModel           @default(MILESTONE)
+  billingModel       BillingModel            @default(MILESTONE)
   createdById        String?
   allocations        Allocation[]
   clientPOs          ClientPO[]
@@ -444,11 +445,11 @@ model Project {
   tickets            Ticket[]
   timesheets         Timesheet[]
   timesheetEntries   TimesheetEntry[]
-  client             Client?                @relation(fields: [clientId], references: [id])
-  pm                 User?                  @relation("ProjectPM", fields: [pmId], references: [id])
-  createdBy          User?                  @relation("ProjectCreatedBy", fields: [createdById], references: [id])
-  profitCenter       ProfitCenter?          @relation(fields: [profitCenterId], references: [id])
-  currency           Currency?              @relation(fields: [currencyId], references: [id])
+  client             Client?                 @relation(fields: [clientId], references: [id])
+  pm                 User?                   @relation("ProjectPM", fields: [pmId], references: [id])
+  createdBy          User?                   @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  profitCenter       ProfitCenter?           @relation(fields: [profitCenterId], references: [id])
+  currency           Currency?               @relation(fields: [currencyId], references: [id])
   demand             Demand?
   changeRequests     ChangeRequest[]
   sprints            Sprint[]
@@ -458,13 +459,13 @@ model Project {
   retainerConfig     RetainerConfig?
   expenses           ProjectExpense[]
   tmBillingRuns      TmBillingRun[]
-  directInvoices     Invoice[]              @relation("InvoiceProject")
+  directInvoices     Invoice[]               @relation("InvoiceProject")
   baselines          Baseline[]
   deliveryItems      DeliveryItem[]
   testSuites         TestSuite[]
   testRuns           TestRun[]
   deployments        Deployment[]
-  assets             Asset[]                @relation("AssetProject")
+  assets             Asset[]                 @relation("AssetProject")
   clientContactLinks ProjectClientContact[]
   statusCcUsers      ProjectStatusCcUser[]
   reportSettings     DeliveryReportSettings?
@@ -474,67 +475,67 @@ model Project {
 }
 
 model Task {
-  id               String           @id @default(uuid())
-  title            String
-  description      String?
-  status           String           @default("BACKLOG")
-  priority         String           @default("MEDIUM")
-  estimatedEffort  Float?
-  actualEffort     Float            @default(0)
-  startDate        DateTime?
-  endDate          DateTime?
-  projectId        String
-  assigneeId       String?
-  parentId         String?
-  predecessorId    String?
-  milestoneId      String?
-  sprintId         String?
-  storyPoints      Float?
-  complexity       Int              @default(3)
-  techStack        String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  taskType         String?
-  taskTypeMasterId String?
-  isCritical       Boolean          @default(false)
-  wbsLevel         String?
-  plannedStart     DateTime?
-  plannedEnd       DateTime?
-  plannedHours     Float?
+  id                  String               @id @default(uuid())
+  title               String
+  description         String?
+  status              String               @default("BACKLOG")
+  priority            String               @default("MEDIUM")
+  estimatedEffort     Float?
+  actualEffort        Float                @default(0)
+  startDate           DateTime?
+  endDate             DateTime?
+  projectId           String
+  assigneeId          String?
+  parentId            String?
+  predecessorId       String?
+  milestoneId         String?
+  sprintId            String?
+  storyPoints         Float?
+  complexity          Int                  @default(3)
+  techStack           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  taskType            String?
+  taskTypeMasterId    String?
+  isCritical          Boolean              @default(false)
+  wbsLevel            String?
+  plannedStart        DateTime?
+  plannedEnd          DateTime?
+  plannedHours        Float?
   // Derived effort spread over the task's working days — see daily-effort.util.ts
-  dailyEffort      Float?
+  dailyEffort         Float?
   // True when dailyEffort was typed by hand instead of being derived.
-  dailyEffortOverride Boolean @default(false)
-  workingDays      Int?
-  progressPct      Float            @default(0)
-  crId             String?
-  phase            CRPhase?
-  uploadBatchId    String?
-  bulkUploadBatchId String?
-  assignee         User?            @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  milestone        Milestone?       @relation(fields: [milestoneId], references: [id])
-  parent           Task?            @relation("TaskHierarchy", fields: [parentId], references: [id])
-  subTasks         Task[]           @relation("TaskHierarchy")
-  predecessor      Task?            @relation("TaskDependencies", fields: [predecessorId], references: [id])
-  successors       Task[]           @relation("TaskDependencies")
-  project          Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  changeRequest    ChangeRequest?   @relation(fields: [crId], references: [id])
-  skills           TaskSkill[]
-  entries          TimesheetEntry[]
-  ticketId         String?
-  ticket           Ticket?          @relation(fields: [ticketId], references: [id])
-  sprint           Sprint?          @relation(fields: [sprintId], references: [id])
-  issues           Issue[]
-  deploymentId     String?
-  deployment       Deployment?      @relation("DeploymentTasks", fields: [deploymentId], references: [id])
-  dependenciesFrom Dependency[]     @relation("DependencyFrom")
-  dependenciesTo   Dependency[]     @relation("DependencyTo")
-  createdById      String?
-  createdBy        User?            @relation("TaskCreatedBy", fields: [createdById], references: [id])
-  taskTypeMaster   TaskTypeMaster?  @relation(fields: [taskTypeMasterId], references: [id])
-  taskAssignees    TaskAssignee[]
-  uploadBatch      TaskUploadBatch? @relation("TaskUploadBatchTasks", fields: [uploadBatchId], references: [id])
-  bulkUploadBatch  TaskBulkUploadBatch? @relation("TaskBulkUploadTasks", fields: [bulkUploadBatchId], references: [id])
+  dailyEffortOverride Boolean              @default(false)
+  workingDays         Int?
+  progressPct         Float                @default(0)
+  crId                String?
+  phase               CRPhase?
+  uploadBatchId       String?
+  bulkUploadBatchId   String?
+  assignee            User?                @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  milestone           Milestone?           @relation(fields: [milestoneId], references: [id])
+  parent              Task?                @relation("TaskHierarchy", fields: [parentId], references: [id])
+  subTasks            Task[]               @relation("TaskHierarchy")
+  predecessor         Task?                @relation("TaskDependencies", fields: [predecessorId], references: [id])
+  successors          Task[]               @relation("TaskDependencies")
+  project             Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  changeRequest       ChangeRequest?       @relation(fields: [crId], references: [id])
+  skills              TaskSkill[]
+  entries             TimesheetEntry[]
+  ticketId            String?
+  ticket              Ticket?              @relation(fields: [ticketId], references: [id])
+  sprint              Sprint?              @relation(fields: [sprintId], references: [id])
+  issues              Issue[]
+  deploymentId        String?
+  deployment          Deployment?          @relation("DeploymentTasks", fields: [deploymentId], references: [id])
+  dependenciesFrom    Dependency[]         @relation("DependencyFrom")
+  dependenciesTo      Dependency[]         @relation("DependencyTo")
+  createdById         String?
+  createdBy           User?                @relation("TaskCreatedBy", fields: [createdById], references: [id])
+  taskTypeMaster      TaskTypeMaster?      @relation(fields: [taskTypeMasterId], references: [id])
+  taskAssignees       TaskAssignee[]
+  uploadBatch         TaskUploadBatch?     @relation("TaskUploadBatchTasks", fields: [uploadBatchId], references: [id])
+  bulkUploadBatch     TaskBulkUploadBatch? @relation("TaskBulkUploadTasks", fields: [bulkUploadBatchId], references: [id])
 
   @@index([taskTypeMasterId])
   @@index([createdById])
@@ -2935,5 +2936,50 @@ model ActivityRecurrenceAssignee {
   user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([recurrenceId, userId])
+  @@index([userId])
+}
+
+// ============================================================================
+// WHAT'S NEW FEATURE (Feature Announcement & Discovery)
+// ============================================================================
+
+model AppFeature {
+  id               String   @id @default(uuid())
+  title            String
+  shortDescription String
+  fullDescription  String?
+  iconName         String? // Name of the Lucide icon (e.g. "Settings2")
+  featureUrl       String?
+  demoVideoUrl     String?
+  isActive         Boolean  @default(true)
+  publishedAt      DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  roles        AppFeatureRole[]
+  interactions AppFeatureInteraction[]
+}
+
+model AppFeatureRole {
+  id        String @id @default(uuid())
+  featureId String
+  roleName  String // Matches Role name in your system
+
+  feature AppFeature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([featureId, roleName])
+  @@index([roleName])
+}
+
+model AppFeatureInteraction {
+  id        String   @id @default(uuid())
+  featureId String
+  userId    String
+  viewedAt  DateTime @default(now())
+
+  feature AppFeature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([featureId, userId])
   @@index([userId])
 }

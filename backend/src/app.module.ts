@@ -79,6 +79,7 @@ import { TaskTypeMasterModule } from './task-type-master/task-type-master.module
 import { AdvancedAnalyticsModule } from './advanced-analytics/advanced-analytics.module';
 import { MaturityModule } from './maturity/maturity.module';
 import { TlDashboardModule } from './tl-dashboard/tl-dashboard.module';
+import { WhatsNewModule } from './whats-new/whats-new.module';
 
 @Module({
   imports: [
@@ -166,6 +167,7 @@ import { TlDashboardModule } from './tl-dashboard/tl-dashboard.module';
     AdvancedAnalyticsModule,
     TaskTypeMasterModule,
     MaturityModule,
+    WhatsNewModule,
   ],
   controllers: [AppController],
   providers: [
