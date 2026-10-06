@@ -453,8 +453,14 @@ export class AttendanceService {
     const record = await this.prisma.attendance.findFirst({
       where: {
         userId,
-        date: { gte: dayRange.start, lt: dayRange.end },
         checkIn: { not: null },
+        OR: [
+          // Primary: match by stored date field (how check-in normally records)
+          { date: { gte: dayRange.start, lt: dayRange.end } },
+          // Fallback: match by actual checkIn timestamp (handles IST rounding edge case
+          // where stored date may differ by milliseconds from the computed range boundary)
+          { checkIn: { gte: dayRange.start, lt: dayRange.end } },
+        ],
       },
       select: { id: true },
     });

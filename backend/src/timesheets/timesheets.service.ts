@@ -109,13 +109,20 @@ export class TimesheetsService {
   }
 
   async getOrCreateWeekly(dto: CreateWeeklyTimesheetDto) {
-    await this.assertWithinCreationWindow(dto.startDate);
+    // 1. Force exact UTC midnight normalization to prevent duplicates
+    const normalizedStart = new Date(dto.startDate);
+    normalizedStart.setUTCHours(0, 0, 0, 0);
+
+    const normalizedEnd = new Date(dto.endDate);
+    normalizedEnd.setUTCHours(23, 59, 59, 999);
+
+    await this.assertWithinCreationWindow(normalizedStart);
 
     const timesheet = await this.prisma.timesheet.findUnique({
       where: {
         user_week: {
           userId: dto.userId,
-          startDate: new Date(dto.startDate),
+          startDate: normalizedStart,
         },
       },
       include: { entries: true },
@@ -126,8 +133,8 @@ export class TimesheetsService {
     return this.prisma.timesheet.create({
       data: {
         userId: dto.userId,
-        startDate: new Date(dto.startDate),
-        endDate: new Date(dto.endDate),
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
         status: TimesheetStatus.DRAFT,
       },
       include: { entries: true },

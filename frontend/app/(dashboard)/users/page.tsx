@@ -150,7 +150,7 @@ function UserFormModal({ editUser, roles, departments, skills, users, onClose, o
     setServerError(null);
 
     const payload: Record<string, unknown> = {
-      email: form.email.trim(),
+      email: form.email.trim().toLowerCase(),
       firstName: form.firstName.trim() || undefined,
       lastName: form.lastName.trim() || undefined,
       roleId: form.roleId,
@@ -236,7 +236,7 @@ function UserFormModal({ editUser, roles, departments, skills, users, onClose, o
             <input
               type="email"
               value={form.email}
-              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value.toLowerCase().trim() }))}
               placeholder="jane@company.com"
               className={cn('field-input', errors.email && 'border-destructive')}
             />

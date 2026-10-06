@@ -15,6 +15,7 @@ import { Transform } from 'class-transformer';
 import { EmploymentStatus } from './employment-status.enum';
 
 export class CreateUserDto {
+  @Transform(({ value }) => typeof value === 'string' ? value.trim().toLowerCase() : value)
   @IsEmail()
   @IsNotEmpty()
   email: string;
