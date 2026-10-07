@@ -35,6 +35,7 @@ model User {
   passwordResetExpires    DateTime?
   allocations             Allocation[]
   auditLogs               AuditLog[]
+  errorLogs               ErrorLog[]
   compOffs                CompOff[]
   leaves                  Leave[]
   leaveBalances           LeaveBalance[]
@@ -314,6 +315,31 @@ model AuditLog {
   @@index([entityId])
   @@index([userId])
   @@index([createdAt])
+}
+
+// Tracks ALL failed HTTP requests (any method, any status 4xx/5xx)
+// Append-only — no updatedAt, mirrors AuditLog structure.
+model ErrorLog {
+  id            String   @id @default(uuid())
+  method        String   // GET, POST, PUT, PATCH, DELETE
+  url           String   // Full request URL
+  module        String   // Derived from URL segment (e.g. "users", "timesheets")
+  statusCode    Int      // HTTP status code: 400, 401, 403, 404, 500 etc.
+  errorMessage  String   // Human-readable error message
+  errorStack    String?  // Stack trace (only for 500 Internal Server Errors)
+  userId        String?  // Who hit the endpoint (null for unauthenticated)
+  ipAddress     String?  // Client IP address
+  requestBody   Json?    // Request body (passwords/tokens stripped)
+  requestQuery  Json?    // Query string params
+  requestParams Json?    // Route params (:id etc.)
+  createdAt     DateTime @default(now())
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([module])
+  @@index([statusCode])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([method])
 }
 
 model Menu {
